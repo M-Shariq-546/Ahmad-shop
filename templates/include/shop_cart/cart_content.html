@@ -1,0 +1,85 @@
+{% load static %}
+{% load static i18n %}
+
+<div class="popupCart-wrapper">
+  <div class="popupCart">
+    <div class="popupCart-title">
+      <h2>Product added to cart</h2>
+      <span>There are {{ total_quantity }} items in your cart.</span>
+      <button type="button" id="close_cart_popup">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="popupCart-content">
+      <div class="InfoBlock">
+        <div>
+          <span>Delivery:</span>
+          <span>Free</span>
+        </div>
+      </div>
+      <div class="popupCart-items">
+        {% for product in cart_products %}
+            <div class="popupCart-item">
+            <div class="cartbox-content">
+                <div>
+                <div
+                    class="cartbox-img"
+                    style="
+                    background-image: url(
+                        {% if product.images %}
+                            {{ product.images.url }}
+                        {% else %}
+                            {% static 'assets/placeholder.png' %}
+                        {% endif %}
+                    );
+                    "
+                ></div>
+                <div class="cartbox-details">
+                    <a href="{% url 'products:product_detail' product.slug %}">{{ product.name }}</a>
+                    {% if product.discount_price %}
+                        <div class="cartbox-discount">
+                            -{{ product.discount_percentage|floatformat:0 }}%
+                        </div>
+                    {% endif %}
+                    <div class="cartbox-price">
+                        {% if product.discount_price %}
+                            <p class="final_price">{{ product.discount_price }} $</p>
+                            <p class="old_price">{{ product.price }} $</p>
+                        {% else %}
+                            <p class="final_price">{{ product.price }} $</p>
+                        {% endif %}
+                    </div>
+                </div>
+                </div>
+                <button
+                id="remove_from_cart"
+                class="delete_btn"
+                type="button"
+                data-index="{{ product.id }}"
+                >
+                <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="cartbox-footer">
+                <span>Total count:</span>
+                <span>410 $</span>
+            </div>
+            </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="popupCart-footer">
+      <div class="popupCart-total">
+        <span>Total amount:</span>
+        <span>410 $</span>
+      </div>
+      <div class="popupCart-buttons">
+        <button id="close_cart_popup" type="button">Continue shopping</button>
+        <a href="{% url 'shop_cart:cart_summary' %}" class="popupCart-button"
+          >Go to cart</a
+        >
+      </div>
+    </div>
+  </div>
+  <div class="popupCart-overlay"></div>
+</div>

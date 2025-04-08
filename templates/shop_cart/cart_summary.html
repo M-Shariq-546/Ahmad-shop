@@ -1,0 +1,191 @@
+{% extends '_base.html' %}
+{% load static %}
+{% load static i18n %}
+
+{% block title %}<title>Cart Shop | Ahmad Electronics Store</title>{% endblock %}
+
+{% block css %}<link rel="stylesheet" href="{% static 'styles/shop_cart/cart.css' %}" />{% endblock %}
+
+{% block body %}
+   
+    <section id="cart_page">
+      <div class="cart web_size">
+
+        {% if cart_products %}
+        <div class="title">
+          <h2>Cart</h2>
+          <span>Your cart contains 3 items</span>
+        </div>
+        <div class="cart_page_content">
+          <div class="cart-products-group">
+            {% for product in cart_products %}
+            <div class="cart_item">
+              <div class="top">
+                <div class="left">
+                  <div class="img">
+                    <img src="{% if product.images %}{{ product.images.url }}{% else %}{% static 'assets/placeholder.png' %}{% endif %}" alt="{{ product.name }}" onerror="this.src='{% static 'assets/placeholder.png' %}'" />
+                  </div>
+                  <div class="info">
+                    <a href="{% url 'products:product_detail' product.slug %}">{{ product.name }}</a>
+                    <div>
+                        {% if product.discount_price %}
+                            <span>-{{ product.discount_percentage|floatformat:0 }}%</span>
+                        {% endif %}
+                    </div>
+                    <div class="price">
+                        {% if product.discount_price %}
+                            <p class="final_price">{{ product.discount_price }} $</p>
+                            <p class="old_price">{{ product.price }} $</p>
+                        {% else %}
+                            <p class="final_price">{{ product.price }} $</p>
+                        {% endif %}
+                    </div>
+                  </div>
+                </div>
+                <div class="right">
+                  <div class="product-count">
+                    <button id="decrement_count">
+                      <svg
+                        width="13"
+                        height="12"
+                        viewBox="0 0 13 12"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <g clip-path="url(#clip0_83_5196)">
+                          <path
+                            d="M2.93652 6H9.85513"
+                            stroke="#002046"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_83_5196">
+                            <rect
+                              width="11.8605"
+                              height="11.8605"
+                              fill="white"
+                              transform="translate(0.46582 0.0697632)"
+                            />
+                          </clipPath>
+                        </defs>
+                      </svg>
+                    </button>
+                    <span>1</span>
+                    <button id="increment_count">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <g clip-path="url(#clip0_83_5199)">
+                          <path
+                            d="M6.07031 2.54068V9.45928"
+                            stroke="#002046"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M2.61035 6H9.52896"
+                            stroke="#002046"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_83_5199">
+                            <rect
+                              width="11.8605"
+                              height="11.8605"
+                              fill="white"
+                              transform="translate(0.139648 0.0697632)"
+                            />
+                          </clipPath>
+                        </defs>
+                      </svg>
+                    </button>
+                  </div>
+                  <button id="remove_from_cart" class="delete_btn" type="button" data-index="{{ product.id }}">
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="bottom">
+                <span>Total count:</span>
+                <span></span>
+              </div>
+            </div>
+            {% endfor %}
+            <button id="place_order" type="button">Place an order</button>
+          </div>
+          <div class="total_check">
+            <div class="total_goods_count">Order count ({{ total_quantity }} good):</div>
+            <span class="total_check_price" id="grand_total">200.00 $</span>
+          </div>
+        </div>
+        {% else %}
+        <div class="empty_cart">
+          <img src="" alt="Empty cart" />
+          <p>Cart is empty</p>
+        </div>
+        {% endif %}
+      </div>
+    </section>
+
+{% endblock %}
+
+
+{% block script %}
+
+<script>
+$(document).ready(function () {
+    function updateGrandTotal() {
+        let grandTotal = 0;
+        $(".cart_item").each(function () {
+            let quantity = parseInt($(this).find(".product-count span").text());
+            let price = parseFloat($(this).find(".final_price").text().replace("$", "").trim());
+            let total = price * quantity;
+            $(this).find(".bottom span:last-child").text(total.toFixed(2) + " $");
+            grandTotal += total;
+        });
+        $("#grand_total").text(grandTotal.toFixed(2) + " $"); // Update the final total
+    }
+
+    $(".cart_item").each(function () {
+        let cartItem = $(this);
+        let incrementBtn = cartItem.find("#increment_count");
+        let decrementBtn = cartItem.find("#decrement_count");
+        let quantitySpan = cartItem.find(".product-count span");
+
+        // Increment quantity
+        incrementBtn.click(function () {
+            let quantity = parseInt(quantitySpan.text());
+            quantity++;
+            quantitySpan.text(quantity);
+            updateGrandTotal();
+        });
+
+        // Decrement quantity
+        decrementBtn.click(function () {
+            let quantity = parseInt(quantitySpan.text());
+            if (quantity > 1) {
+                quantity--;
+                quantitySpan.text(quantity);
+                updateGrandTotal();
+            }
+        });
+
+        // Initialize total on page load
+        updateGrandTotal();
+    });
+});
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,202 @@
+{% load i18n %}{% load static %} 
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    {% block title %}{% endblock %}
+
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/favicon.ico' %}">
+
+    <!-- Link Swiper's CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <link rel="stylesheet" href="{% static 'styles/index.css' %}" />
+    <link rel="stylesheet" href="{% static 'styles/main.css' %}" />
+    
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    {% block css %}{% endblock %}
+    <link rel="stylesheet" href="{% static 'styles/responsive.css' %}" />
+  </head>
+
+  <body>
+    <div class="overlay" id="loader">
+      <div class="dot-spinner">
+          <div class="dot-spinner__dot"></div>
+          <div class="dot-spinner__dot"></div>
+          <div class="dot-spinner__dot"></div>
+          <div class="dot-spinner__dot"></div>
+          <div class="dot-spinner__dot"></div>
+          <div class="dot-spinner__dot"></div>
+          <div class="dot-spinner__dot"></div>
+          <div class="dot-spinner__dot"></div>
+      </div>
+    </div>
+    {% include 'include/navbar/navbar.html' %}
+    {% include 'include/navbar/static_categories.html' %}
+    {% include 'include/shop_cart/cart_content.html' %}
+    {% block body %}
+    {% endblock %}
+    {% include 'include/footer/footer.html' %}
+
+    <!-- Font Awesome -->
+    <script
+      src="https://kit.fontawesome.com/d17c83b3d5.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="{% static 'app/main.js' %}"></script>
+    <script>
+      // Loader
+      $("html").addClass("loading");
+      $(window).on("load", function () {
+          setTimeout(() => {
+              $("#loader").fadeOut(() => {
+                  $("html").removeClass("loading");
+              });
+          }, 1000);
+      });
+
+    
+
+      // Add to cart functionality
+      $(document).on("click", ".add_to_cart", function (e) {
+        e.preventDefault();
+        $.ajax({
+          type: 'POST',
+          url: '{% url "shop_cart:cart_add" %}',
+          data: {
+            product_id: $(this).val(),
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            action: 'post'
+          },
+
+          success: function (json) {
+            updateCartPreview(json);
+          },
+
+          error: function (xhr, errmsg, err) {
+            console.log(errmsg);
+            console.log(err)
+          }
+
+        });
+
+        $(".popupCart-wrapper").addClass("active");
+        $(".popupCart-wrapper .popupCart-overlay").addClass("active");
+        $("html").addClass("active");
+      })
+
+      // Add and remove to featured functionality
+      $(document).on("click", "#selected_like", function (e) {
+          e.preventDefault();
+          let button = $(this);
+          let product_id = button.data("product-id");
+          let action = button.hasClass("favorited") ? "delete" : "post";
+
+          $.ajax({
+              type: 'POST',
+              url: action === "post" ? '{% url "featured:featured_add" %}' : '{% url "featured:featured_delete" %}',
+              data: {
+                  product_id: product_id,
+                  csrfmiddlewaretoken: '{{ csrf_token }}',
+                  action: action
+              },
+              success: function (json) {
+                  if (action === "post") {
+                      button.addClass("favorited").css("color", "#F21000");
+                      location.reload();
+                  } else {
+                      button.removeClass("favorited").css("color", "#fff");
+                      location.reload();
+                  }
+              },
+              error: function (xhr, errmsg, err) {
+                  console.log(errmsg);
+              }
+          });
+      });
+
+    
+      function updateCartPreview(data) {
+        $('.popupCart-title span').text('There are ' + data.total_quantity + ' items in your cart.');
+
+        $('.popupCart-items').empty();
+
+        data.cart_products.forEach(function(product) {
+            var productHtml = `
+                <div class="popupCart-item">
+                    <div class="cartbox-content">
+                        <div>
+                            <div class="cartbox-img" style="background-image: url('${product.image_url}');"></div>
+                            <div class="cartbox-details">
+                                <a href="">${product.name}</a>
+                                ${product.discount_percentage ? 
+                                `<div class="cartbox-discount">-${product.discount_percentage} %</div>` : 
+                                ''}
+                                <div class="cartbox-price">
+                                    ${product.discount_price ? 
+                                        `<p class="final_price">${product.discount_price} $</p><p class="old_price">${product.price} $</p>` : 
+                                        `<p class="final_price">${product.price} $</p>`}
+                                </div>
+                            </div>
+                        </div>
+                        <button id="remove_from_cart" class="delete_btn" type="button" data-index="${product.id}">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                    <div class="cartbox-footer">
+                        <span>Total count:</span>
+                        <span>${product.price} $</span>
+                    </div>
+                </div>
+            `;
+            $('.popupCart-items').append(productHtml);
+        });
+      }
+
+      // Remove product from cart functionality
+      $(document).on("click", "#remove_from_cart", function (e) {
+        e.preventDefault();
+        $.ajax({
+          type: 'POST',
+          url: '{% url "shop_cart:cart_delete" %}',
+          data: {
+            product_id: $(this).data('index'),
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            action: 'post'
+          },
+
+          success: function (json) {
+            location.reload();
+          },
+
+          error: function (xhr, errmsg, err) {
+            console.log(errmsg);
+            console.log(err)
+          }
+
+        });
+      })
+
+      // Close cart product 
+      $(document).on("click", "#close_cart_popup", function (e) {
+        $(".popupCart-wrapper").removeClass("active");
+        $(".popupCart-wrapper .popupCart-overlay").removeClass("active");
+        $("html").removeClass("active");
+        location.reload();
+      }) 
+    </script>
+    {% block script %}{% endblock %}
+  </body>
+</html>

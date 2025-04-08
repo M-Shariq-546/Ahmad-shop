@@ -1,0 +1,290 @@
+{% extends '_base.html' %}
+{% load static %}
+
+{% block title %}<title>{{ category.name }} | Ahmad Electronics Store</title>{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'styles/categories/category.css' %}" />
+<link rel="stylesheet" href="{% static 'styles/products/products.css' %}" />
+{% endblock %}
+
+{% block body %}
+<section id="all_categories_page">
+    <div class="all_categories web_size">
+        
+        <div class="page_section_name">
+            <span>
+                Home > {{ category.get_category_path }}
+            </span>
+            <h1>{{ category.name }}</h1>
+        </div>
+
+
+        {% if subcategories %}
+        <div class="categories_group">
+            {% for subcategory in subcategories %}
+                <div class="categories_item">
+                    <a href="{{ subcategory.get_absolute_url }}">
+                        {% if subcategory.image_link %}
+                            <img src="{{ subcategory.image_link.url }}" alt="{{ subcategory.name }}" /> 
+                        {% endif %}
+                        <h3>{{ subcategory.name }}</h3>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if product_list.has_other_pages or product_list|length > 0 %}
+        <section id="products">
+            <div class="web_size products-content">
+                {% include 'products/_filter_block.html' %}
+                <div style="flex: 1">
+                    <div style="display: flex; justify-content: start; align-items: start; gap: 8px; margin-bottom: 8px">
+                        <div class="sort_data_by_price">
+                        <div data-info="select-box" class="select-box-byPrice">
+                            <div>
+                                <span class="byPrice-atFirst">At first:</span>
+                                <span class="byPrice-selected">Latest items</span>
+                            </div>
+                            <i class="fa-solid fa-angle-up"></i>
+                        </div>
+                        <div data-info="select-dropdown-box" class="select-dropdown-box-byPrice">
+                            <div>
+                                <a href="?sort=cheap_first">Cheap first</a>
+                            </div>
+                            <div>
+                                <a href="?sort=expensive_first">Expensive first</a>
+                            </div>
+                            <div>
+                                <a href="?sort=latest_items">Latest items</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% include 'products/_mb_filter.html' %}
+                </div>
+                    <div class="products_group" id="product-list">
+                        {% for product in product_list  %}
+                            {% if product.in_stock %}
+                            <div class="product">
+                                <button id="selected_like"
+                                        class="{% if product.id|stringformat:"s" in request.session.session_key %}favorited{% endif %}"
+                                        data-product-id="{{ product.id }}"
+                                        style="color: {% if product.id|stringformat:"s" in request.session.session_key %}#F21000{% else %}#fff{% endif %};">
+                                    <i class="fa-solid fa-heart" aria-hidden="true"></i>
+                                </button>
+                                <a href="{% url 'products:product_detail' product.slug %}">
+                                <div class="product_img">
+                                    {% if product.is_top_seller %}
+                                    <div class="top_sales">Top sales</div>
+                                    {% endif %}
+                                    {% if product.images %}
+                                        <img src="{{ product.images.url }}" alt="{{ product.name }}">
+                            
+                                    {% endif %}
+                                    {% if product.discount_price %}
+                                    <div class="product_discount_percent">
+                                        <span>-{{ product.discount_percentage|floatformat:0 }}%</span>
+                                    </div>
+                                    {% else %}
+                                    {% endif %}
+                                </div>
+
+                                <div class="product_info">
+                                    <div class="ptoduct_price">
+                                        {% if product.discount_price %}
+                                            <span class=" main_price">{{ product.discount_price }} $</span>
+                                            <span class="discount_price">{{ product.price }} $</span>
+                                        {% else %}
+                                            <span class="main_price">{{ product.price }} $</span>
+                                        {% endif %}
+                                    </div>
+                                    <h3>{{ product.name }}</h3>
+                                </div>
+                                </a>
+                                <button
+                                    class="add_to_cart"
+                                    id="add_to_cart"
+                                    value="{{ product.id }}"
+                                    data-product-name="{{ product.name }}" 
+                                    data-product-price="{{ product.price }}"
+                                >
+                                <svg
+                                    width="20"
+                                    height="18"
+                                    viewBox="0 0 20 18"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                    d="M6.06667 17.6C6.51111 17.6 6.9 17.4333 7.23333 17.1C7.56667 16.7666 7.73333 16.3889 7.73333 15.9666C7.73333 15.5444 7.56667 15.1666 7.23333 14.8333C6.9 14.5 6.51111 14.3333 6.06667 14.3333C5.62222 14.3333 5.24444 14.5 4.93333 14.8333C4.62222 15.1666 4.46667 15.5444 4.46667 15.9666C4.46667 16.3889 4.62222 16.7666 4.93333 17.1C5.24444 17.4333 5.62222 17.6 6.06667 17.6ZM19.8 4.06664C19.7111 3.97775 19.6444 3.93331 19.6 3.93331H5.06667C4.88889 3.93331 4.72222 3.87775 4.56667 3.76664C4.41111 3.65553 4.33333 3.51109 4.33333 3.33331L3.93333 0.599976C3.93333 0.46664 3.84444 0.399975 3.66667 0.399975H0.333333C0.111111 0.399975 0 0.511086 0 0.733309V1.39997C0 1.6222 0.111111 1.73331 0.333333 1.73331H2.86667L4.46667 12.8666C4.46667 13 4.57778 13.0666 4.8 13.0666H15.8667C15.9111 13.0666 16 13 16.1333 12.8666L20 4.26664C19.9556 4.26664 19.9111 4.2222 19.8667 4.13331L19.8 4.06664ZM17.5333 6.26664L15.2 11.3333C15.1111 11.6 14.8889 11.7333 14.5333 11.7333H6.2C5.97778 11.7333 5.8 11.6778 5.66667 11.5666C5.53333 11.4555 5.46667 11.3111 5.46667 11.1333L4.8 6.06664C4.8 5.79998 4.86667 5.59997 5 5.46664C5.13333 5.33331 5.28889 5.26664 5.46667 5.26664H16.8667C16.9556 5.26664 17.0667 5.28886 17.2 5.33331C17.3333 5.37775 17.4333 5.44442 17.5 5.53331C17.5667 5.6222 17.6111 5.73331 17.6333 5.86664C17.6556 5.99998 17.6222 6.13331 17.5333 6.26664ZM14.7333 17.6C15.1778 17.6 15.5556 17.4333 15.8667 17.1C16.1778 16.7666 16.3333 16.3889 16.3333 15.9666C16.3333 15.5444 16.1778 15.1666 15.8667 14.8333C15.5556 14.5 15.1778 14.3333 14.7333 14.3333C14.2889 14.3333 13.9 14.5 13.5667 14.8333C13.2333 15.1666 13.0667 15.5444 13.0667 15.9666C13.0667 16.3889 13.2333 16.7666 13.5667 17.1C13.9 17.4333 14.2889 17.6 14.7333 17.6Z"
+                                    fill="#F21000"
+                                    />
+                                </svg>
+                                <span>Add to cart</span>
+                                </button>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% if is_paginated %}
+                        <div class="pagination">
+                            <div class="arrow-group">
+                                {% if page_obj.number > 1 %}
+                                    <a href="?page=1" class="page-link arrow"><i class="fa-solid fa-angles-left"></i></a>
+                                    <a href="?page={{ page_obj.previous_page_number }}" class="page-link arrow"><i class="fa-solid fa-angle-left"></i></a>
+                                {% endif %}
+                            </div>
+
+                            <div class="pages-link">
+                                {% for num in page_obj.paginator.page_range %}
+                                    {% if page_obj.number == num %}
+                                        <span class="page-link active">{{ num }}</span>
+                                    {% elif num <= 3 or num > page_obj.paginator.num_pages|add:"-3" or num == page_obj.number|add:"-1" or num == page_obj.number|add:"1" %}
+                                        <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                                    {% elif num == 4 or num == page_obj.paginator.num_pages|add:"-4" %}
+                                        <span class="page-link">...</span>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+
+                            <div class="arrow-group">
+                                {% if page_obj.number < page_obj.paginator.num_pages %}
+                                    <a href="?page={{ page_obj.next_page_number }}" class="page-link arrow"><i class="fa-solid fa-angle-right"></i></a>
+                                    <a href="?page={{ page_obj.paginator.num_pages }}" class="page-link arrow"><i class="fa-solid fa-angles-right"></i></a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+        {% else %}
+            <div class="no_products">
+                <img src="{% static 'assets/no_items.svg' %}" alt="No products" />
+                <p>There are no products in this category</p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+
+
+{% block script %}
+<script>
+$(document).ready(function() {
+    const checkboxes = $(".filter-checkbox");
+    const checkboxesMb = $(".filter-checkbox-mb");
+    const priceFilterBtn = $("#filter-btn");
+
+    // Toggle sorting options on click
+    $(".select-box-byPrice").click(function() {
+        $(".select-dropdown-box-byPrice").toggleClass("active");
+        $(".sort_data_by_price .select-box-byPrice i").toggleClass("active");
+    });
+
+    // When a sort option is selected
+    $(".select-dropdown-box-byPrice a").click(function(e) {
+        e.preventDefault(); 
+        
+        const selectedSort = $(this).text();
+        $(".byPrice-selected").text(selectedSort);
+        
+        const formData = $("#filter-form").serialize() + `&sort=${$(this).attr('href').split('=')[1]}`;
+
+        $(".select-dropdown-box-byPrice").removeClass("active");
+        $(".sort_data_by_price .select-box-byPrice i").removeClass("active");
+
+        $.ajax({
+            url: `?${formData}`, 
+            type: "GET",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            success: function(data) {
+                const newProductList = $(data).find("#product-list").html();
+                $("#product-list").html(newProductList);
+            }
+        });
+    });
+
+    checkboxes.on("change", applyFilters);
+    checkboxesMb.on("change", applyFiltersMB)
+    priceFilterBtn.on("click", applyFilters);
+
+    // Show more characteristic values
+    $(".see-more").on("click", function() {
+        const characteristic = $(this).data("characteristic");
+        const moreValuesDiv = $(`.more-values[data-characteristic="${characteristic}"]`);
+        const hiddenItems = moreValuesDiv.find(".sort_data_value.hidden");
+
+        let count = 0;
+        hiddenItems.each(function() {
+            if (count < 10) {
+                $(this).removeClass("hidden");
+                count++;
+            }
+        });
+
+        if (hiddenItems.length <= 10) {
+            $(this).hide();
+        }
+    });
+
+    // Define the applyFilters function
+    function applyFilters() {
+        const formData = $("#filter-form").serialize();
+
+        
+        $.ajax({
+            url: `?${formData}`,
+            type: "GET",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            success: function(data) {
+                const newProductList = $(data).find("#product-list").html();
+                $("#product-list").html(newProductList);
+            }
+        });
+    }
+
+    // Aplyfilter for mobile
+    function applyFiltersMB() {
+        const formData = $("#filter-form-mb").serialize();
+        
+        $.ajax({
+            url: `?${formData}`,
+            type: "GET",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            success: function(data) {
+                const newProductList = $(data).find("#product-list").html();
+                $("#product-list").html(newProductList);
+            }
+        });
+    }
+
+    // Open mobile filter sidebar
+    $("#mobile_filter_btn").on("click", function() {
+        $(".mobile_filter_layer").addClass("active");
+    });
+
+    // Toglle for dropdown 
+    $(".mb_filter_title").on("click", function () {
+        $(this).next(".mb_sort_value").toggleClass("active"); 
+        $(this).toggleClass("active"); 
+    });
+
+
+    // Close mobile filter sidebar
+    $("#mobile_filter_close_btn").on("click", function() {
+        $(".mobile_filter_layer").removeClass("active");
+        applyFiltersMB();
+    });
+});
+</script>
+
+{% endblock %}

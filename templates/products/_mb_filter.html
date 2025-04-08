@@ -1,0 +1,69 @@
+<div class="mobile_product_filter">
+  <button type="button" id="mobile_filter_btn">
+    <i class="fa-solid fa-filter"></i>
+    <span>Filters</span>
+  </button>
+  <div class="mobile_filter_layer">
+    
+      <div class="mb_filter_header">
+        <span>Filters</span>
+        <button type="button" id="mobile_filter_close_btn">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="filter-form-mb">
+        <div class="mb_filter_content">
+          <div class="sort_data_filter_mobile mb-filter-item">
+            <div class="mb_filter_title">
+              <span>Price</span>
+              <i class="fa-solid fa-caret-down"></i>
+            </div>
+            <div class="price-filter mb_sort_value">
+              <input type="number" name="min_price" min="0" id="min_price" />
+              <span>-</span>
+              <input
+                type="number"
+                name="max_price"
+                min="0"
+                max="10000"
+                id="max_price"
+              />
+              <button type="button" id="filter-btn">OK</button>
+            </div>
+          </div>
+          {% for characteristic, values in characteristics.items %}
+            <div class="mb-filter-item">
+              <div class="mb_filter_title">
+                <span>{{ characteristic }}</span>
+                <i class="fa-solid fa-angle-up"></i>
+              </div>
+              <div class="mb_sort_value">
+                {% for value in values %}
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="{{ characteristic }}"
+                      value="{{ value }}"
+                      class="filter-checkbox-mb"
+                    />
+                    <span>{{ value }}</span>
+                  </label>
+                {% endfor %}
+              </div>
+            </div>
+          {% endfor %}
+
+          
+        </div>
+      </form>
+      <div class="mb_filter_footer">
+        <button type="button" id="mb_filter_reset_btn">
+          <span>Reset</span>
+        </button>
+        <button type="button" id="mb_filter_close_btn">
+          <span>Apply</span>
+        </button>
+      </div>
+    
+  </div>
+</div>

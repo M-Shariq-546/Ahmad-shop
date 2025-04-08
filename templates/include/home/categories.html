@@ -1,0 +1,127 @@
+{% load static %}
+{% load static i18n %}
+
+<section id="categories">
+  <div class="categories-content web_size">
+    <div class="section_name">Our categories</div>
+    <div class="categories-group">
+      <div class="categories-item">
+        <div class="content">
+          <div class="icon">
+            <img
+              src="{% static 'assets/categories/gaming-console.png' %}"
+              alt="Gaming & Consoles"
+            />
+          </div>
+          <span>Gaming & Consoles</span>
+          <a href="{% url 'app:category_detail' category_slug='gaming-consoles' %}">View all</a>
+        </div>
+      </div>
+      <div class="categories-item">
+        <div class="content">
+          <div class="icon">
+            <img
+              src="{% static 'assets/categories/pc.png' %}"
+              alt="PC & Laptop Accessories"
+            />
+          </div>
+          <span>PC & Laptop Accessories</span>
+          <a href="{% url 'app:category_detail' category_slug='pc-laptop-accessories' %}">View all</a>
+        </div>
+      </div>
+      <div class="categories-item">
+        <div class="content">
+          <div class="icon">
+            <img
+              src="{% static 'assets/categories/Audio & Sound Systems.png' %}"
+              alt="Audio & Sound Systems"
+            />
+          </div>
+          <span>Audio & Sound Systems</span>
+          <a href="{% url 'app:category_detail' category_slug='audio-sound-systems' %}">View all</a>
+        </div>
+      </div>
+      <div class="categories-item">
+        <div class="content">
+          <div class="icon">
+            <img
+              src="{% static 'assets/categories/Toys & games.png' %}"
+              alt="Toys & games"
+            />
+          </div>
+          <span>Toys & games</span>
+          <a href="{% url 'app:category_detail' category_slug='toys-games' %}">View all</a>
+        </div>
+      </div>
+      <div class="categories-item">
+        <div class="content">
+          <div class="icon">
+            <img
+              src="{% static 'assets/categories/Home Entertainment.png' %}"
+              alt="Home Entertainment"
+            />
+          </div>
+          <span>Home Entertainment</span>
+          <a href="{% url 'app:category_detail' category_slug='tv-and-home-entertainment' %}">View all</a>
+        </div>
+      </div>
+      <div class="categories-item">
+        <div class="content">
+          <div class="icon">
+            <img
+              src="{% static 'assets/categories/Security & Surveillance.png' %}"
+              alt="Security & Surveillance"
+            />
+          </div>
+          <span>Security & Surveillance</span>
+          <a href="{% url 'app:category_detail' category_slug='security-surveillance' %}">View all</a>
+        </div>
+      </div>
+      <div class="categories-item">
+        <div class="content">
+          <div class="icon">
+            <img
+              src="{% static 'assets/categories/Lighting & Electricals.png' %}"
+              alt="Lighting & Electricals"
+            />
+          </div>
+          <span>Lighting & Electricals</span>
+          <a href="{% url 'app:category_detail' category_slug='lighting-electricals' %}">View all</a>
+        </div>
+      </div>
+      <div class="categories-item">
+        <div class="content">
+          <div class="icon">
+            <img
+              src="{% static 'assets/categories/Car Accessories.png' %}"
+              alt="Car Accessories"
+            />
+          </div>
+          <span>Car Accessories</span>
+          <a href="{% url 'app:category_detail' category_slug='car-accessories' %}">View all</a>
+        </div>
+      </div>
+      <div class="categories-item">
+        <div class="content">
+          <div class="icon">
+            <img
+              src="{% static 'assets/categories/Self-care Tech & Gadgets.png' %}"
+              alt="Self-care Tech & Gadgets"
+            />
+          </div>
+          <span>Self-care Tech & Gadgets</span>
+          <a href="{% url 'app:category_detail' category_slug='self-care-tech-gadgets' %}">View all</a>
+        </div>
+      </div>
+      <div class="categories-item">
+        <div class="content">
+          <div class="icon">
+            <img src="" alt="Phone & Mobile Accessories" />
+          </div>
+          <span>Phone & Mobile Accessories</span>
+          <a href="{% url 'app:category_detail' category_slug='phone-mobile-accessories' %}">View all</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

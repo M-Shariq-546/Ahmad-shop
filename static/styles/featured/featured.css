@@ -1,0 +1,27 @@
+#featured_page {
+    /* background-color: var(--black); */
+    background-color: var(--white);
+    padding: 20px 0;
+}
+
+.page_section_name {
+    /* color: var(--white); */
+    color: var(--black);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 20px;
+}
+
+.page_section_name span {
+    font-size: 15px;
+}
+
+.featured_group {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-auto-rows: 394px; /* Each row will be 394px tall */
+    grid-column-gap: 18px;
+    grid-row-gap: 20px;
+}
+

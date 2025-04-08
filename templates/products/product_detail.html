@@ -1,0 +1,259 @@
+{% extends '_base.html' %}
+{% load static %}
+{% load static i18n %}
+
+{% block title %}<title>{{ product.name }} - {{ product.brand }} | Ahmad Electronics Store</title>{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'styles/products/products.css' %}" />
+<link rel="stylesheet" href="{% static 'styles/products/product-detail.css' %}" />
+{% endblock %}
+
+{% block body %}
+
+<section id="product-detail">
+    <div class="product-detail web_size">
+        <div class="top">
+            <div class="product_gallery">
+                <div class="main_img">
+                    <img id="main-img" src="{% if product.images %}{{ product.images.url }}{% else %}{% static 'assets/placeholder.png' %}{% endif %}" alt="{{ product.name }}" onerror="this.src='{% static 'assets/placeholder.png' %}'" />
+                </div>
+                <div class="imgs">
+                    {% if product.images %}
+                        <button onclick="changeMainImage('{{ product.images.url }}')">
+                            <img src="{{ product.images.url }}" alt="{{ product.name }}" onerror="this.src='{% static 'assets/placeholder.png' %}'" />
+                        </button>
+                    {% endif %}
+                    {% if product.image_2 %}
+                        <button onclick="changeMainImage('{{ product.image_2.url }}')">
+                            <img src="{{ product.image_2.url }}" alt="{{ product.name }}" onerror="this.src='{% static 'assets/placeholder.png' %}'" />
+                        </button>
+                    {% endif %}
+                    {% if product.image_3 %}
+                        <button onclick="changeMainImage('{{ product.image_3.url }}')">
+                            <img src="{{ product.image_3.url }}" alt="{{ product.name }}" onerror="this.src='{% static 'assets/placeholder.png' %}'" />
+                        </button>
+                    {% endif %}
+                    {% if product.image_4 %}
+                        <button onclick="changeMainImage('{{ product.image_4.url }}')">
+                            <img src="{{ product.image_4.url }}" alt="{{ product.name }}" onerror="this.src='{% static 'assets/placeholder.png' %}'" />
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="main_info">
+                <span>Brand: {{ product.brand }}</span>
+                <h3>{{ product.name }}</h3>
+                <p id="product-description">
+                    {{ product.description|slice:":350" }}{% if product.description|length > 150 %}
+                    ... <span class="read-more" style="color: blue; cursor: pointer;">Read more</span>
+                    {% endif %}
+                </p>
+
+                <div class="hr_line"></div>
+
+                <div class="price">
+                    {% if product.discount_price %}
+                        <span class="original-price">${{ product.price }}</span>
+                        <span class="discounted-price">${{ product.discount_price }}</span>
+                        <span class="discount-percentage">-{{ product.discount_percentage|floatformat:0 }}%</span>
+                    {% else %}
+                        <span class="original-price">${{ product.price }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="btns-group">
+                    <div class="product-count">
+                        <button id="decrement_count">
+                            <svg
+                                width="17"
+                                height="17"
+                                viewBox="0 0 17 17"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <g clip-path="url(#clip0_417_2812)">
+                                <path
+                                    d="M3.54297 8.5H13.4596"
+                                    stroke="black"
+                                    stroke-width="2.5"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                                </g>
+                                <defs>
+                                <clipPath id="clip0_417_2812">
+                                    <rect width="17" height="17" fill="black" />
+                                </clipPath>
+                                </defs>
+                            </svg>
+                        </button>
+                        <span id="product_quantity">1</span>
+                        <button id="increment_count">
+                            <svg
+                                width="17"
+                                height="17"
+                                viewBox="0 0 17 17"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <g clip-path="url(#clip0_417_2815)">
+                                <path
+                                    d="M8.5 3.54169V13.4584"
+                                    stroke="black"
+                                    stroke-width="2.5"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                                <path
+                                    d="M3.54297 8.5H13.4596"
+                                    stroke="black"
+                                    stroke-width="2.5"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                                </g>
+                                <defs>
+                                <clipPath id="clip0_417_2815">
+                                    <rect width="17" height="17" fill="black" />
+                                </clipPath>
+                                </defs>
+                            </svg>
+                        </button>
+                    </div>
+                    <button class="buy-now-detail-page">Buy now</button>
+                    <button class="add-to-cart-detail-page">Add to cart</button>
+                </div>
+            </div>
+        </div>
+        <div class="characteristics">
+            {% if product.characteristics.exists %}
+                {% for characteristic in product.characteristics.all %}
+                    <div class="characteristics_item">
+                        <span>{{ characteristic.name }}</span>
+                        <p>{{ characteristic.value }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No characteristics available for this product.</p>
+            {% endif %}
+        </div>
+
+        {% if related_products %}
+            {% if related_products|length > 0 %}
+            <div class="related_products">
+                <h3>Related products</h3>
+                <div class="products_group">
+                {% for product in related_products  %}
+                {% if product.in_stock %}
+                    <div class="product">
+                    <button id="selected_like"
+                            class="{% if product.id|stringformat:"s" in request.session.session_key %}favorited{% endif %}"
+                            data-product-id="{{ product.id }}"
+                            style="color: {% if product.id|stringformat:"s" in request.session.session_key %}#F21000{% else %}#fff{% endif %};">
+                        <i class="fa-solid fa-heart" aria-hidden="true"></i>
+                    </button>
+                    <a href="{% url 'products:product_detail' product.slug %}">
+                        <div class="product_img">
+                        {% if product.is_top_seller %}
+                            <div class="top_sales">Top sales</div>
+                        {% endif %}
+                        <img src="{% if product.images %}{{ product.images.url }}{% else %}{% static 'assets/placeholder.png' %}{% endif %}" alt="{{ product.name }}" onerror="this.src='{% static 'assets/placeholder.png' %}'" />
+                        {% if product.discount_price %}
+                            <div class="product_discount_percent">
+                            <span>-{{ product.discount_percentage|floatformat:0 }}%</span>
+                            </div>
+                        {% else %}
+                        {% endif %}
+                        </div>
+
+                        <div class="product_info">
+                        <div class="ptoduct_price">
+                            {% if product.discount_price %}
+                                <span class=" main_price">{{ product.discount_price }} $</span>
+                                <span class="discount_price">{{ product.price }} $</span>
+                            {% else %}
+                                <span class="main_price">{{ product.price }} $</span>
+                            {% endif %}
+                        </div>
+                        <h3>{{ product.name }}</h3>
+                        </div>
+                    </a>
+                    <button
+                        type="button"
+                        class="add_to_cart"
+                        id="add_to_cart"
+                        value="{{ product.id }}" 
+                        data-product-name="{{ product.name }}" 
+                        data-product-price="{{ product.price }}"
+                    >
+                        <svg
+                        width="20"
+                        height="18"
+                        viewBox="0 0 20 18"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        >
+                        <path
+                            d="M6.06667 17.6C6.51111 17.6 6.9 17.4333 7.23333 17.1C7.56667 16.7666 7.73333 16.3889 7.73333 15.9666C7.73333 15.5444 7.56667 15.1666 7.23333 14.8333C6.9 14.5 6.51111 14.3333 6.06667 14.3333C5.62222 14.3333 5.24444 14.5 4.93333 14.8333C4.62222 15.1666 4.46667 15.5444 4.46667 15.9666C4.46667 16.3889 4.62222 16.7666 4.93333 17.1C5.24444 17.4333 5.62222 17.6 6.06667 17.6ZM19.8 4.06664C19.7111 3.97775 19.6444 3.93331 19.6 3.93331H5.06667C4.88889 3.93331 4.72222 3.87775 4.56667 3.76664C4.41111 3.65553 4.33333 3.51109 4.33333 3.33331L3.93333 0.599976C3.93333 0.46664 3.84444 0.399975 3.66667 0.399975H0.333333C0.111111 0.399975 0 0.511086 0 0.733309V1.39997C0 1.6222 0.111111 1.73331 0.333333 1.73331H2.86667L4.46667 12.8666C4.46667 13 4.57778 13.0666 4.8 13.0666H15.8667C15.9111 13.0666 16 13 16.1333 12.8666L20 4.26664C19.9556 4.26664 19.9111 4.2222 19.8667 4.13331L19.8 4.06664ZM17.5333 6.26664L15.2 11.3333C15.1111 11.6 14.8889 11.7333 14.5333 11.7333H6.2C5.97778 11.7333 5.8 11.6778 5.66667 11.5666C5.53333 11.4555 5.46667 11.3111 5.46667 11.1333L4.8 6.06664C4.8 5.79998 4.86667 5.59997 5 5.46664C5.13333 5.33331 5.28889 5.26664 5.46667 5.26664H16.8667C16.9556 5.26664 17.0667 5.28886 17.2 5.33331C17.3333 5.37775 17.4333 5.44442 17.5 5.53331C17.5667 5.6222 17.6111 5.73331 17.6333 5.86664C17.6556 5.99998 17.6222 6.13331 17.5333 6.26664ZM14.7333 17.6C15.1778 17.6 15.5556 17.4333 15.8667 17.1C16.1778 16.7666 16.3333 16.3889 16.3333 15.9666C16.3333 15.5444 16.1778 15.1666 15.8667 14.8333C15.5556 14.5 15.1778 14.3333 14.7333 14.3333C14.2889 14.3333 13.9 14.5 13.5667 14.8333C13.2333 15.1666 13.0667 15.5444 13.0667 15.9666C13.0667 16.3889 13.2333 16.7666 13.5667 17.1C13.9 17.4333 14.2889 17.6 14.7333 17.6Z"
+                            fill="#F21000"
+                        />
+                        </svg>
+                        <span>Add to cart</span>
+                    </button>
+                    </div>
+                {% endif %}
+                {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}
+
+{% block script %}
+<script>
+    function changeMainImage(imageUrl) {
+        const mainImg = document.getElementById('main-img');
+        mainImg.src = imageUrl;
+    }
+    $(document).ready(function () {
+        let quantity = 1;
+        const quantityDisplay = $("#product_quantity");
+        const incrementBtn = $("#increment_count");
+        const decrementBtn = $("#decrement_count");
+
+        incrementBtn.click(function () {
+            quantity++;
+            quantityDisplay.text(quantity);
+        });
+
+        decrementBtn.click(function () {
+            if (quantity > 1) {
+                quantity--;
+                quantityDisplay.text(quantity);
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        let fullText = `{{ product.description|escapejs }}`;
+        let currentLength = 350; 
+        const increment = 150; 
+        let descElement = $("#product-description");
+
+        $(document).on("click", ".read-more", function () {
+            if (currentLength < fullText.length) {
+                currentLength += increment;
+                let newText = fullText.substring(0, currentLength) + 
+                    (currentLength < fullText.length ? '... <span class="read-more" style="color: blue; cursor: pointer;">Read more</span>' : '');
+                descElement.html(newText);
+            }
+        });
+    });
+
+
+</script>
+{% endblock %}

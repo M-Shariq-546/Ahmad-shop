@@ -1,0 +1,41 @@
+{% extends '_base.html' %}
+{% load static %}
+{% load static i18n %}
+
+{% block title %}<title>Ahmad Electronics Store | Categories</title>{% endblock %}
+
+{% block css %}<link rel="stylesheet" href="{% static 'styles/categories/category.css' %}" />{% endblock %}
+
+{% block body %}
+
+    <section id="all_categories_page">
+      <div class="all_categories web_size">
+
+        <div class="page_section_name">
+            <span>
+                Home > Categories
+            </span>
+            <h1>All categories</h1>
+        </div>
+
+        <div class="categories_group">
+           {% for category in categories %}
+            <div class="categories_item">
+                <a href="{{ category.get_absolute_url }}">
+                    {% if category.image_link %}
+                        <img src="{{ category.image_link.url }}" alt="{{ category.name }}" />
+                    {% endif %}
+                    <h3>{{ category.name }}</h3>
+                </a>
+            </div>
+            {% empty %}
+            <p>No categories available.</p>
+            {% endfor %}
+        </div>
+      </div>
+    </section>
+
+{% endblock %}
+
+
+{% block script %}{% endblock %}
