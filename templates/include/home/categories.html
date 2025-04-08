@@ -1,10 +1,10 @@
-{% load static %}
-{% load static i18n %}
+{% load static %} {% load static i18n %}
 
 <section id="categories">
   <div class="categories-content web_size">
     <div class="section_name">Our categories</div>
     <div class="categories-group">
+      {% for category in all_categories %}
       <div class="categories-item">
         <div class="content">
           <div class="icon">
@@ -13,11 +13,14 @@
               alt="Gaming & Consoles"
             />
           </div>
-          <span>Gaming & Consoles</span>
-          <a href="{% url 'app:category_detail' category_slug='gaming-consoles' %}">View all</a>
+          <span>{{ category.name }}</span>
+          <a href="{% url 'app:category_detail' category_slug=category.slug%}"
+            >View all</a
+          >
         </div>
       </div>
-      <div class="categories-item">
+      {% endfor %}
+      <!-- <div class="categories-item">
         <div class="content">
           <div class="icon">
             <img
@@ -121,7 +124,7 @@
           <span>Phone & Mobile Accessories</span>
           <a href="{% url 'app:category_detail' category_slug='phone-mobile-accessories' %}">View all</a>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </section>

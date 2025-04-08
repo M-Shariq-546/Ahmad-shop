@@ -2,8 +2,9 @@
   <div class="web_size">
     <div class="swiper categoriesSwipper">
       <div class="swiper-wrapper">
+        {% for category in categories %}
         <div class="swiper-slide static_categories_item">
-          <a href="{% url 'app:category_detail' category_slug='phones-smart-devices-accessories' %}">
+          <a href="{% url 'app:category_detail' category_slug=category.slug %}">
             <svg
               width="12"
               height="18"
@@ -18,7 +19,7 @@
                 fill="#F21000"
               />
             </svg>
-            <span>Phones, smart devices, accessories</span>
+            <span>{{ category.name }}</span>
             <svg
               width="7"
               height="9"
@@ -35,7 +36,8 @@
             </svg>
           </a>
         </div>
-        <div class="swiper-slide static_categories_item">
+        {% endfor %}
+        <!-- <div class="swiper-slide static_categories_item">
           <a href="{% url 'app:category_detail' category_slug='laptops-and-computers' %}">
             <svg
               width="24"
@@ -171,9 +173,11 @@
               />
             </svg>
           </a>
-        </div>
+        </div> -->
       </div>
     </div>
-    <a href="{% url 'app:categories_list' %}" class="all-categories">All categories</a>
+    <a href="{% url 'app:categories_list' %}" class="all-categories"
+      >All categories</a
+    >
   </div>
 </div>

@@ -110,17 +110,19 @@
 .products_group .product,
 .latest_products .product,
 .featured_group .product {
-    border-radius: 2px;
+    border-radius: 33px;
     background: #232323;
     height: 100%;
     width: 100%;
     position: relative;
+    padding: 20px 5px;
 }
-
+/*
 .latest_products .product {
     height: 394px;
     max-width: 250px;
 }
+*/
 
 .products_group .product #selected_like,
 .latest_products .product #selected_like,
@@ -141,10 +143,17 @@
 .latest_products .product .product_img,
 .featured_group .product .product_img {
     position: relative;
-    height: 186px;
+    width: 100%;
+    height: 412px;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: contain !important;
+    background-color: #fff !important;
     background-color: var(--gray);
-    margin: 24px 24px 0;
+    /*margin: 24px 24px 0; */
+    margin-top: 24px;
     overflow: hidden;
+    border-radius: 18px;
 }
 
 .products_group .product .product_img img,
@@ -155,6 +164,7 @@
     height: 100%;
     object-fit: cover;
     transition: transform 0.3s ease-in-out;
+    
 }
 
 .products_group .product .product_info,
@@ -162,10 +172,12 @@
 .featured_group .product .product_info {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
     padding: 0 24px;
     margin-top: 26px;
 }
+
+
 
 .products_group .product .product_info .ptoduct_price,
 .latest_products .product .product_info .ptoduct_price,
@@ -195,9 +207,11 @@
 .products_group .product .product_info h3,
 .latest_products .product .product_info h3,
 .featured_group .product .product_info h3 {
-    font-weight: 400;
+    font-weight: 500;
     line-height: 150%;
-    font-size: 13px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 18px;
     color: var(--white);
 }
 

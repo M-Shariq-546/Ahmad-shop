@@ -59,6 +59,7 @@
                     </div>
 
                     <div class="product_info">
+                        <h3>{{ product.name }}</h3>
                       <div class="ptoduct_price">
                           {% if product.discount_price %}
                               <span class=" main_price">{{ product.discount_price }} $</span>
@@ -67,7 +68,7 @@
                               <span class="main_price">{{ product.price }} $</span>
                           {% endif %}
                       </div>
-                      <h3>{{ product.name }}</h3>
+                      
                     </div>
                   </a>
                   <button

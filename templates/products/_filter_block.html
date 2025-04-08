@@ -1,6 +1,6 @@
-    <div class="sort_data">
-        <form id="filter-form">
-            <div class="sort_data_item">
+<div class="sort_data">
+    <form id="filter-form">
+        <!-- <div class="sort_data_item">
                 <span>Price</span>
                 <div class="hr_line"></div>
                 <div class="sort_data_value price-filter">
@@ -9,38 +9,50 @@
                     <input type="number" name="max_price" min="0" max="10000" id="max_price"/>
                     <button type="button" id="filter-btn">OK</button>
                 </div>
-            </div>
+            </div> -->
 
-            {% for characteristic, values in characteristics.items %}
-            <div class="sort_data_item">
-                <span>{{ characteristic }}</span>
-                <div class="hr_line"></div>
-                
-                {% for value in values|slice:":8" %}
-                <div class="sort_data_value">
+        {% for characteristic, values in characteristics.items %}
+        <div class="sort_data_item">
+            <span>{{ characteristic }}</span>
+            <div class="hr_line"></div>
+
+            {% for value in values|slice:":8" %}
+            <div class="sort_data_value">
+                <label>
+                    <input
+                        type="checkbox"
+                        name="{{ characteristic }}"
+                        value="{{ value }}"
+                        class="filter-checkbox"
+                    />
+                    <span>{{ value }}</span>
+                </label>
+            </div>
+            {% endfor %} {% if values|length > 8 %}
+            <div class="more-values" data-characteristic="{{ characteristic }}">
+                {% for value in values|slice:"8:" %}
+                <div class="sort_data_value hidden">
                     <label>
-                        <input type="checkbox" name="{{ characteristic }}" value="{{ value }}" class="filter-checkbox"/>
+                        <input
+                            type="checkbox"
+                            name="{{ characteristic }}"
+                            value="{{ value }}"
+                            class="filter-checkbox"
+                        />
                         <span>{{ value }}</span>
                     </label>
                 </div>
                 {% endfor %}
-
-                {% if values|length > 8 %}
-                <div class="more-values" data-characteristic="{{ characteristic }}">
-                    {% for value in values|slice:"8:" %}
-                    <div class="sort_data_value hidden">
-                        <label>
-                            <input type="checkbox" name="{{ characteristic }}" value="{{ value }}" class="filter-checkbox"/>
-                            <span>{{ value }}</span>
-                        </label>
-                    </div>
-                    {% endfor %}
-                </div>
-                <button type="button" class="see-more" data-characteristic="{{ characteristic }}">See More</button>
-                {% endif %}
             </div>
-            {% endfor %}
-
-
-        </form>
-    </div>
+            <button
+                type="button"
+                class="see-more"
+                data-characteristic="{{ characteristic }}"
+            >
+                See More
+            </button>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </form>
+</div>
