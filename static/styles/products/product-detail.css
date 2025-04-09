@@ -215,44 +215,36 @@
 
 
 /* Characteristics */
-.product-detail .description {
-        width: 60%;
-        margin: 0 4%;
+.product-detail .description { 
+    padding-left: 2rem !important;
 }
 
-.product-detail .description .characteristics_item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 16px;
+.product-detail .description .title {
+    font-size: 24px !important;
+    margin-bottom: 2rem !important;
 }
 
-.product-detail .description .characteristics_item span,
-.product-detail .description .characteristics_item p {
-    flex: 1;
+.product-detail .characteristics_list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.product-detail .characteristics_list li {
+    font-size: 14px;
     font-weight: 400;
-    font-size: 13px;
-    text-align: left;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    /* color: var(--white); */
+    line-height: 1.8;
+    margin-bottom: 6px !important;
+    position: relative;
+    padding-left: 16px !important;
 }
-
-.product-detail .description .characteristics_item:nth-child(6n+1),
-.product-detail .description .characteristics_item:nth-child(6n+2),
-.product-detail .description .characteristics_item:nth-child(6n+3) {
-    background: var(--dark_grey);
-    color: var(--white) !important;
-} 
-
-.product-detail .description .characteristics_item:nth-child(6n+4),
-.product-detail .description .characteristics_item:nth-child(6n+5),
-.product-detail .description .characteristics_item:nth-child(6n+6) {
-    background: transparent;
+/*
+.product-detail .characteristics_list li::before {
+    content: "-";
+    position: absolute;
+    left: 0;
 }
-
+*/
 /* Releated products */
 .related_products {
     margin: 50px 0;
@@ -261,7 +253,6 @@
 .related_products h3 {
     font-size: 32px;
     font-weight: 600;
-    /* color: var(--white); */
     color: var(--black);
     margin-bottom: 40px;
 }
@@ -269,6 +260,6 @@
 .related_products .products_group {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(1, 394px);
+    /*grid-template-rows: repeat(1, 394px); */
     grid-column-gap: 16px;
 }
