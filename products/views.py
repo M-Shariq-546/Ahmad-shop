@@ -1,13 +1,13 @@
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, DetailView
-from .models import Product
+from .models import Category, Product
 from django.core.paginator import Paginator
 
 
 class ProductsListView(ListView):
     model = Product
     template_name = 'products/products_list.html'
-    paginate_by = 20  
+    paginate_by = 20
 
     def get_queryset(self):
         queryset = Product.objects.all()
@@ -24,18 +24,19 @@ class ProductsListView(ListView):
         characteristic_filters = {}
 
         for key, values in filters.lists():
-            if key in ['min_price', 'max_price', 'sort', 'page']: 
+            if key in ['min_price', 'max_price', 'sort', 'page']:
                 continue
-            characteristic_filters[key] = values 
+            characteristic_filters[key] = values
 
         for name, values in characteristic_filters.items():
-            queryset = queryset.filter(characteristics__name=name, characteristics__value__in=values)
+            queryset = queryset.filter(characteristics__name=name,
+                                       characteristics__value__in=values)
 
         sort_order = filters.get('sort')
         if sort_order == 'cheap_first':
-            queryset = queryset.order_by('price')  
+            queryset = queryset.order_by('price')
         elif sort_order == 'expensive_first':
-            queryset = queryset.order_by('-price') 
+            queryset = queryset.order_by('-price')
         else:
             queryset = queryset.order_by('-published_date')
 
@@ -61,14 +62,18 @@ class ProductsListView(ListView):
                     characteristics[characteristic.name] = set()
                 characteristics[characteristic.name].add(characteristic.value)
 
-        context['characteristics'] = {key: list(values) for key, values in characteristics.items()}
-        
+        context['characteristics'] = {
+            key: list(values)
+            for key, values in characteristics.items()
+        }
+
         return context
 
+
 class ProductDetailView(DetailView):
-    model = Product 
+    model = Product
     template_name = 'products/product_detail.html'
-    context_object_name = 'product' 
+    context_object_name = 'product'
 
     def get_object(self):
         """ Fetch product by slug. """
@@ -77,8 +82,10 @@ class ProductDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         product = self.get_object()
-        
+        context['categories'] = Category.objects.all()[:5]
+
         # Example: Fetch related products from the same category
-        context['related_products'] = Product.objects.filter(category=product.category).exclude(id=product.id)[:4]
+        context['related_products'] = Product.objects.filter(
+            category=product.category).exclude(id=product.id)[:4]
 
         return context
