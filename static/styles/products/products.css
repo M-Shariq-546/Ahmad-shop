@@ -184,7 +184,8 @@
 .featured_group .product .product_info .ptoduct_price {
     display: flex;
     align-items: center;
-    gap: 8px;
+    margin-top:5px;
+    gap: 20px;
 }
 
 .products_group .product .product_info .ptoduct_price .main_price,
@@ -209,8 +210,6 @@
 .featured_group .product .product_info h3 {
     font-weight: 500;
     line-height: 150%;
-    margin-top: 5px;
-    margin-bottom: 5px;
     font-size: 18px;
     color: var(--white);
 }
@@ -249,21 +248,23 @@
 
 .add_to_cart {
     height: 43px;
-    width: 100%;
+    width: auto;
     display: flex;
     align-items: center;
-    justify-content: start;
+    justify-content: center;
     gap: 8px;
-    position: absolute;
+    position: static;
     bottom: 0;
     font-weight: 700;
     font-size: 12px;
-    color: var(--accent);
+    color: #ffff;
     cursor: pointer;
     background-color: transparent;
     border: none;
-    border-top: 1px solid #e7e8ed;
+   /* border-top: 1px solid #e7e8ed; */
     padding: 0 24px;
+    border-radius: 10px;
+    background-color: var(--accent);
 }
 
 /* Sort by price */
