@@ -101,14 +101,12 @@ class CategoryDetailView(DetailView):
         category = self.get_object()
         product_list = self.get_queryset().filter(category=category,
                                                   in_stock=True)
-        print('product_list',
-              self.get_queryset().filter(category=category, in_stock=True))
+
         # Pagination logic
         paginator = Paginator(product_list, self.paginate_by)
         page = self.request.GET.get('page')
 
         paginated_products = paginator.get_page(page)
-        print('paginated_products', paginated_products)
         context['product_list'] = paginated_products
         context['paginator'] = paginator
         context['page_obj'] = paginated_products

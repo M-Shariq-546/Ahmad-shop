@@ -126,6 +126,8 @@
                 </div>
             </div>
         </div>
+        
+        <!--
         <div class="characteristics">
             {% if product.characteristics.exists %}
                 {% for characteristic in product.characteristics.all %}
@@ -138,6 +140,21 @@
                 <p>No characteristics available for this product.</p>
             {% endif %}
         </div>
+        -->
+        <div class="description">
+            {% if product.characteristics.exists %}
+            {% for characteristic in product.characteristics.all %}
+            <div class="characteristics_item">
+            <h1>{{ characteristic.name }}</h1>
+            <p class="text1">{{ characteristic.value }}</p>
+            <p class="text2"></p>
+            <p class="text3"></p>
+            </div>
+            {% endfor %}
+            {% else %}
+                <p>No characteristics available for this product.</p>
+            {% endif %}
+          </div>
 
         {% if related_products %}
             {% if related_products|length > 0 %}
