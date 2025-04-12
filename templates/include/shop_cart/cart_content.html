@@ -35,7 +35,7 @@
                     "
                 ></div>
                 <div class="cartbox-details">
-                    <a href="{% url 'products:product_detail' product.slug %}">{{ product.name }}</a>
+                    {% comment %} <a href="{% url 'products:product_detail' product.slug %}">{{ product.name }}</a> {% endcomment %}
                     {% if product.discount_price %}
                         <div class="cartbox-discount">
                             -{{ product.discount_percentage|floatformat:0 }}%

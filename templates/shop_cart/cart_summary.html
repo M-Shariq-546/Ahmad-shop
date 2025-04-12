@@ -1,5 +1,4 @@
-{% extends '_base.html' %} {% load static %} {% load static i18n %} {% block title %} <title>Cart Shop | Ahmad Electronics Store</title>{% endblock %} {%
-block css %}<link
+{% extends '_base.html' %} {% load static %} {% load static i18n %} {% block title %} <title>Cart Shop | Ahmad Electronics Store</title>{% endblock %} {% block css %}<link
   rel="stylesheet"
   href="{% static 'styles/shop_cart/cart.css' %}"
 />{% endblock %} {% block body %}
@@ -14,7 +13,8 @@ block css %}<link
     <div class="cart_page_content">
       <div class="cart-products-group">
         {% for product in cart_products %}
-        <div class="cart_item">
+        <div class="cart_item"  data-name="{{ product.name }}"
+        data-price="{% if product.discount_price %}{{ product.discount_price }}{% else %}{{ product.price }}{% endif %}">
           <div class="top">
             <div class="left">
               <div class="img">
@@ -128,7 +128,9 @@ block css %}<link
           </div>
         </div>
         {% endfor %}
+        <a href="{% url 'shop_cart:checkout' %}">
         <button id="place_order" type="button">Place an order</button>
+        </a>
       </div>
       <div class="total_check">
         <div class="total_goods_count">

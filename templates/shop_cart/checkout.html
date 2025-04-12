@@ -1,0 +1,180 @@
+<!-- pages/checkout.html -->
+{% extends '_base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'styles/shop_cart/checkout.css' %}">
+{% endblock %}
+
+{% block body %}
+
+     <div class="checkout">
+        <div class="checkout-content">
+            <div class="checkout-l">
+                <form action="" id="checkout-form" method="post">
+                    {% csrf_token %}
+                    
+                    <div class="checkout-item">
+                        <div class="checkout-title">Delivery</div>
+                        <div class="checkout-selected">Ship</div>
+                    </div>
+                
+                    <div class="checkout-item">
+                        <div class="checkout-title">Contact Information</div>
+                
+                        <div class="checkout-client-info">
+                            <div class="checkout-input">
+                                <input type="text" placeholder="First name" id="first_name" name="first_name" required>
+                            </div>
+                            <div class="checkout-input">
+                                <input type="text" placeholder="Last name" id="last_name" name="last_name" required>
+                            </div>
+                            <div class="checkout-input fullC1">
+                                <input type="text" placeholder="Address" id="address" name="address" required>
+                            </div>
+                            <div class="checkout-input fullC2">
+                                <input type="text" placeholder="Apartment, suite, etc." id="apartment" name="apartment">
+                            </div>
+                            <div class="checkout-input">
+                                <input type="text" placeholder="City" id="city" name="city" required>
+                            </div>
+                            <div class="checkout-input">
+                                <input type="text" placeholder="Postal code" id="postal_code" name="postal_code" required>
+                            </div>
+                            <div class="checkout-input fullC3">
+                                <input type="text" placeholder="Phone" id="phone" name="phone" required>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="checkout-item">
+                        <div class="checkout-title">Payment</div>
+                        <div class="checkout-selected">Cash on Delivery (COD)</div>
+                        <button id="checkout-btn" class="confirm-order-btn" type="submit">Complete order</button>
+                    </div>
+                </form>                
+            </div>
+            <div class="checkout-r">
+                <div class="checkout-r-item">
+                    <div class="checkout-title">Products</div>
+                    <div class="checkout-products" id="selected-products">
+                        {% for product in cart_products %}
+                            <div class="checkout-product">
+                                {% if product.images.url %}
+                                <img src="{{ product.images.url }}" alt="{{ product.name }}" class="checkout-product-image">
+                                {% endif %}
+                                <div class="checkout-product-details">
+                                    <div class="checkout-product-name">{{ product.name }}</div>
+                                    <div class="checkout-product-quantity">Quantity: {{ product.quantity }}</div>
+                                    <div class="checkout-product-price">Price: {{ product.price }} each</div>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <p>No products in the cart.</p>
+                        {% endfor %}
+                    </div>
+                </div>                
+                <div class="checkout-rb-item">
+                    <div class="checkout-title" >Total</div>
+                    <div class="checkout-totalPrice" id="total-price">
+                        {{total}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        console.log('===== scripts is calling')
+    document.addEventListener("DOMContentLoaded", function () {
+        console.log('==== DOm loaded')
+        const checkOutForm = document.getElementById("checkout-form");
+        console.log(checkOutForm)
+        // Submit form event
+        if (checkOutForm) {
+            checkOutForm.addEventListener("submit", function (event) {
+                event.preventDefault(); // Stop native form submission
+                sendTelegramData();     // Our custom send function
+            });
+        }
+    
+        function sendTelegramData() {
+            const contactDetails = {
+                name: document.getElementById("first_name").value,
+                surname: document.getElementById("last_name").value,
+                number: document.getElementById("phone").value,
+                address: document.getElementById("address").value,
+                apartment: document.getElementById("apartment").value,
+                city: document.getElementById("city").value,
+                postal: document.getElementById("postal_code").value,
+            };
+    
+            // Validate required fields
+            if (
+                !contactDetails.name || !contactDetails.surname || !contactDetails.number ||
+                !contactDetails.address || !contactDetails.city || !contactDetails.postal
+            ) {
+                alert("Please fill in all required fields.");
+                return;
+            }
+    
+            const cart = JSON.parse(localStorage.getItem("cart")) || {};
+            const itemsArray = [];
+    
+            for (const itemId in cart) {
+                const item = cart[itemId];
+                itemsArray.push({
+                    id: itemId,
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.quantity,
+                    color: item.color || "N/A",
+                    image: item.image || "",
+                });
+            }
+    
+            // Send everything to backend
+            fetch("{% url 'shop_cart:send-to-telegram' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCookie("csrftoken"),
+                },
+                body: JSON.stringify({
+                    contact: contactDetails,
+                    cart: itemsArray,
+                }),
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.status === "success") {
+                    alert("✅ Your order is accepted! Our manager will contact you soon :)");
+                    window.location.href = "/thank-you/"; // Optional redirect
+                } else {
+                    alert("❌ The order has not been sent. Please try again or contact support.");
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+                alert("There was an error sending your order.");
+            });
+        }
+    
+        function getCookie(name) {
+            const value = "; " + document.cookie;
+            const parts = value.split("; " + name + "=");
+            if (parts.length === 2) return parts.pop().split(";").shift();
+        }
+    
+        // Optional toggle buttons
+        if (showButton && hideButton) {
+            showButton.addEventListener("click", () => {
+                hiddenBlock.style.display = "block";
+            });
+            hideButton.addEventListener("click", () => {
+                hiddenBlock.style.display = "none";
+            });
+        }
+    });
+    </script>    
+{% endblock %}
+

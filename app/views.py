@@ -2,10 +2,12 @@ from django.shortcuts import get_object_or_404, render
 
 from django.http import JsonResponse
 from products.models import Category, Product
-
+import json 
+import requests
 from django.views.generic import TemplateView, ListView, DetailView
 
 from django.db.models import Q
+from django.conf import settings
 
 from django.core.paginator import Paginator
 

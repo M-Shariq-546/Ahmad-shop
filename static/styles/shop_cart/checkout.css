@@ -1,0 +1,132 @@
+.checkout {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  .checkout-logo {
+    grid-column: span 2;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .checkout-logo img {
+    height: 50px;
+  }
+  
+  .checkout-content {
+    display: contents;
+  }
+  
+  .checkout-l,
+  .checkout-r {
+    background-color: #fff;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  }
+  
+  .checkout-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  
+  .checkout-item {
+    margin-bottom: 30px;
+  }
+  
+  .checkout-selected {
+    font-size: 16px;
+    color: #555;
+    margin-top: 5px;
+  }
+  
+  .checkout-client-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+  }
+  
+  .checkout-input input {
+    width: 100%;
+    padding: 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    transition: border-color 0.3s;
+  }
+  
+  .checkout-input input:focus {
+    border-color: #002046;
+    outline: none;
+  }
+  
+  .fullC1 {
+    grid-column: span 2;
+  }
+  
+  .fullC2 {
+    grid-column: span 2;
+  }
+  
+  .fullC3 {
+    grid-column: span 2;
+  }
+  
+  .confirm-order-btn {
+    background-color: var(--accent);
+    color: white;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+    width: 100%;
+  }
+  
+  .confirm-order-btn:hover {
+    background-color: var(--accent);
+  }
+  
+  /* Right section */
+  .checkout-products {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+  }
+  
+  .checkout-product-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+  }
+  
+  .checkout-totalPrice {
+    margin-top: 15px;
+    font-size: 22px;
+    font-weight: bold;
+    text-align: right;
+  }
+  
+  /* Responsive tweaks */
+  @media (max-width: 768px) {
+    .checkout {
+      grid-template-columns: 1fr;
+      gap: 20px;
+      padding: 10px;
+    }
+  
+    .checkout-logo {
+      margin-bottom: 20px;
+    }
+  }
+  

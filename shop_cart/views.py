@@ -2,6 +2,9 @@ from django.shortcuts import render, get_object_or_404
 from products.models import Product
 from django.http import JsonResponse
 from .cart import Cart
+import json , requests
+from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
 from django.templatetags.static import static
 
 def cart_summary(request):
@@ -50,3 +53,81 @@ def cart_delete(request):
         response = JsonResponse({'Product Name: ': product_id})
 
         return response
+
+
+@csrf_exempt
+def send_to_telegram_view(request):
+    if request.method == 'POST':
+        print('====== request body', request.body)
+        try:
+            received_data = json.loads(request.body)
+            contact_details = received_data.get('contact', {})
+            cart_items = received_data.get('cart', [])
+
+            print(cart_items)
+
+            # Prepare the message for Telegram
+            message = f"New Order Details:\n\nContact Information:\nName: {contact_details.get('name')}\nSurname: {contact_details.get('surname')}\nNumber: {contact_details.get('number')}\nAddress: {contact_details.get('address')}\n\nOrdered Items:\n"
+
+            # Include details about the selected products
+            for item in cart_items:
+                product_name = item.get('name', '')
+                product_price = item.get('price', 0.0)
+                product_quantity = item.get('quantity', 0)
+
+                message += f"Product: {product_name}\nPrice: ${product_price}\nQuantity: {product_quantity}\n\n"
+
+            # Send message to Telegram
+            send_to_telegram(message)
+
+            return JsonResponse({'status': 'success'})
+        except Exception as e:
+            print(f'Error processing the order: {str(e)}')  # Debug print
+            return JsonResponse({'status': 'error', 'message': str(e)})
+
+    return JsonResponse({
+        'status': 'error',
+        'message': 'Invalid request method'
+    })
+
+
+def send_to_telegram(message):
+    bot_token = settings.TELEGRAM_BOT_TOKEN
+    chat_id = settings.TELEGRAM_CHANNEL_ID
+
+    telegram_api_url = f'https://api.telegram.org/bot{bot_token}/sendMessage'
+    params = {
+        'chat_id': chat_id,
+        'text': message,
+    }
+
+    response = requests.post(telegram_api_url, params=params)
+
+    if response.status_code != 200:
+        print(
+            f"Failed to send message to Telegram. Status code: {response.status_code}"
+        )
+
+
+def checkout(request):
+    cart_data = request.session.get('session_key', {})
+    print('===== cart items ', cart_data)
+    products = []
+    total_price = 0
+
+    for item_id, item in cart_data.items():
+        item_total = float(item['price']) * item['quantity']
+        total_price += item_total
+        print('total ==== ', total_price)
+        products.append({
+            'id': item_id,
+            'name': item['name'],
+            'price': item['price'],
+            'quantity': item['quantity'],
+            'total': f"{item_total:.2f}"
+        })
+
+    return render(request, 'shop_cart/checkout.html', {
+        'cart_products': products,
+        'total': f"{total_price:.2f}",
+    })
