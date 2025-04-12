@@ -106,12 +106,23 @@
     grid-column-gap: 8px;
     grid-row-gap: 20px;
 }
-
+.products_group{
+    margin-top: 4px;
+}
 .products_group .product,
 .latest_products .product,
 .featured_group .product {
     border-radius: 33px;
-    background: #232323;
+    overflow: visible !important;
+    z-index:1;
+   /* background: #232323; 
+    background: #fafafa;
+    box-shadow: 0px 4px 4px 0px #fbb6b140; */
+    background: #ffff;
+    box-shadow: 0 2px 4px #ea7971,
+      0 -1px 3px #ea7971;
+    border: 0.2px #ea7971;
+    transition: box-shadow 0.3s ease;
     width: 100%;
     position: relative;
     padding: 20px 5px;
@@ -130,7 +141,7 @@
     top: 4px;
     right: 20px;
     background-color: transparent;
-    border: none;
+    border:none;
     padding: 4px;
     z-index: 2;
     float: right;
@@ -147,7 +158,6 @@
     background-position: center !important;
     background-repeat: no-repeat !important;
     background-size: contain !important;
-    background-color: #fff !important;
     background-color: var(--gray);
     /*margin: 24px 24px 0; */
     margin-top: 24px;
@@ -211,7 +221,7 @@
     font-weight: 500;
     line-height: 150%;
     font-size: 18px;
-    color: var(--white);
+    color: #919191;
 }
 
 .products_group .product .product_discount_percent,

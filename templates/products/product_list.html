@@ -38,12 +38,15 @@
             {% for product in object_list  %}
               {% if product.in_stock %}
                 <div class="product">
-                  <button id="selected_like"
-                          class="{% if product.id|stringformat:"s" in request.session.session_key %}favorited{% endif %}"
-                          data-product-id="{{ product.id }}"
-                          style="color: {% if product.id|stringformat:"s" in request.session.session_key %}#F21000{% else %}#fff{% endif %};">
-                      <i class="fa-solid fa-heart" aria-hidden="true"></i>
-                  </button>
+                    <button id="selected_like"
+                        class="{% if product.id|stringformat:"s" in request.session.session_key %}favorited{% endif %}"
+                        data-product-id="{{ product.id }}"
+                        style="background: transparent; border: none; color: {% if product.id|stringformat:"s" in request.session.session_key %}#F21000{% else %}#fff{% endif %};">
+
+                        <svg width="18" height="16" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20.1667 2.44666C19.58 1.85999 18.9078 1.41999 18.15 1.12666C17.3922 0.833324 16.5978 0.686659 15.7667 0.686659C14.9356 0.686659 14.1533 0.833324 13.42 1.12666C12.6867 1.41999 12.0267 1.85999 11.44 2.44666L11 2.81332L10.56 2.37333C10.0222 1.83555 9.37444 1.40777 8.61667 1.08999C7.85889 0.772213 7.06444 0.613325 6.23333 0.613325C5.40222 0.613325 4.60778 0.772213 3.85 1.08999C3.09222 1.40777 2.42 1.84777 1.83333 2.40999C1.24667 2.97221 0.794444 3.61999 0.476667 4.35332C0.158889 5.08666 0 5.84444 0 6.62666C0 7.40888 0.158889 8.16666 0.476667 8.89999C0.794444 9.63332 1.24667 10.2933 1.83333 10.88L10.34 19.0933C10.5356 19.24 10.7556 19.3133 11 19.3133C11.2444 19.3133 11.44 19.24 11.5867 19.0933L20.1667 10.88C20.7533 10.2933 21.2056 9.64555 21.5233 8.93666C21.8411 8.22777 22 7.46999 22 6.66332C22 5.85666 21.8411 5.08666 21.5233 4.35332C21.2056 3.61999 20.7533 2.98444 20.1667 2.44666ZM15.7667 2.37333C16.9889 2.37333 18.04 2.78888 18.92 3.61999C19.8 4.4511 20.24 5.46555 20.24 6.66332C20.24 7.8611 19.8 8.87555 18.92 9.70666L11 17.3333L3.08 9.63332C2.2 8.80221 1.76 7.79999 1.76 6.62666C1.76 5.45332 2.18778 4.4511 3.04333 3.61999C3.89889 2.78888 4.95 2.37333 6.19667 2.37333C7.44333 2.37333 8.50667 2.78888 9.38667 3.61999L10.4133 4.64666C10.56 4.79332 10.7556 4.86666 11 4.86666C11.2444 4.86666 11.4644 4.79332 11.66 4.64666L12.6867 3.61999C13.5178 2.78888 14.5444 2.37333 15.7667 2.37333Z" fill="#f21000"></path>
+                          </svg>
+                    </button>
                   <a href="{% url 'products:product_detail' product.slug %}">
                     <div class="product_img">
                       {% if product.is_top_seller %}
