@@ -14,7 +14,10 @@ SECRET_KEY = 'django-insecure-udf6mhdf8!#s+lvc63l^n7c=v64hnckn!vp5hg90m!c+vm)_p=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*', '.janeway.replit.dev']
+ALLOWED_HOSTS = [
+    '*', '.janeway.replit.dev',
+    '27fd9cb6-c40d-4b8e-a325-ff151767219d-00-xwa5s2zxgwub.janeway.replit.dev'
+]
 
 # Application definition
 
@@ -138,4 +141,3 @@ CSRF_TRUSTED_ORIGINS = [
 
 TELEGRAM_BOT_TOKEN = '6346684397:AAHFSY9T5NwCUvfuwzocagjfH6XlHETTvDo'
 TELEGRAM_CHANNEL_ID = '-1002028038760'
-

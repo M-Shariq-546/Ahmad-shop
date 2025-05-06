@@ -116,7 +116,19 @@
     .product-detail .top .main_info .hr_line {
         max-width: 100%;
     }
+    .product-detail .top .product_gallery .main_img{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
 
+    .product-detail .top .product_gallery .main_img img{
+        height: 100%;
+        width: 100%;
+        object-fit: contain;
+        border-radius: 6px;
+    }
     .product-detail .top .product_gallery .main_img {
         width: 540px;
     }
@@ -154,6 +166,19 @@
     .featured_group .product .product_img img{
  height: 300px;
 }
+    .product-detail .top .product_gallery .main_img{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .product-detail .top .product_gallery .main_img img{
+        height: 100%;
+        width: 100%;
+        object-fit: contain;
+        border-radius: 6px;
+    }
 }
 @media (max-width: 768px) {
     .products_group .product .product_img,
@@ -215,7 +240,19 @@
         flex-direction: column;
         width: 100%;
     }
+    .product-detail .top .product_gallery .main_img{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
 
+    .product-detail .top .product_gallery .main_img img{
+        height: 100%;
+        width: 100%;
+        object-fit: contain;
+        border-radius: 6px;
+    }
     .product-detail .top .product_gallery .main_img {
         order: 1;
         width: 100%;
@@ -392,9 +429,18 @@
         border: 0px;
         height: 50px;
     }
-
-    .product-detail .top .product_gallery .main_img {
-        height: 240px;
+    .product-detail .top .product_gallery .main_img{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+    
+    .product-detail .top .product_gallery .main_img img{
+        height: 100%;
+        width: 100%;
+        object-fit: contain;
+        border-radius: 6px;
     }
 
     .product-detail .top .product_gallery {
