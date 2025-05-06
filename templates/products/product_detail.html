@@ -141,9 +141,18 @@
             {% endif %}
         </div>
         -->
-        <div class="description" style="padding-left: 35px;">
-            <h1 class="title" style="padding-bottom: 1.5rem; margin-top:30px"; >Description</h2>
-            <p>{{ product.description }}</p>
+        <div class="description" style="padding-left: 35px; max-width: 700px;">
+          <h1 class="title" style="padding-bottom: 1.5rem; margin-top: 10px; font-size: 2rem; color: #333; border-bottom: 2px solid #eee;">
+            Description
+          </h1>
+          <ul style="list-style: none; padding-left: 0;">
+            {% for line in product.description.splitlines %}
+              <li style="position: relative; padding-left: 25px; margin-bottom: 10px; color: #555;">
+                <span style="position: absolute; left: 0; top: 5px; width: 10px; height: 10px; background-color: #3498db; border-radius: 50%;"></span>
+                {{ line }}
+              </li>
+            {% endfor %}
+          </ul>
         </div>
 
 
@@ -176,7 +185,7 @@
                         </div>
 
                         <div class="product_info">
-                            <h3>{{ product.name }}</h3>
+                            <h3>{% if product.name|length <= 50 %}{{ product.name }}{% else %}{{ product.name|slice:":50" }}... {% endif %}</h3>
                         <div class="ptoduct_price">
                             {% if product.discount_price %}
                                 <span class=" main_price">{{ product.discount_price }} $</span>

@@ -94,7 +94,7 @@
                                 </div>
 
                                 <div class="product_info">
-                                    <h3>{{ product.name }}</h3>
+                                    <h3>{% if product.name|length <= 50 %}{{ product.name }}{% else %}{{ product.name|slice:":50" }}... {% endif %}</h3>
                                     <div class="ptoduct_price">
                                         {% if product.discount_price %}
                                             <span class=" main_price">{{ product.discount_price }} $</span>
