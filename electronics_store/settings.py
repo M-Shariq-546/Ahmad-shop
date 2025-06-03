@@ -136,7 +136,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CSRF_TRUSTED_ORIGINS = [
-    "https://27fd9cb6-c40d-4b8e-a325-ff151767219d-00-xwa5s2zxgwub.janeway.replit.dev"
+    "https://27fd9cb6-c40d-4b8e-a325-ff151767219d-00-xwa5s2zxgwub.janeway.replit.dev:8000"
 ]
 
 TELEGRAM_BOT_TOKEN = '6346684397:AAHFSY9T5NwCUvfuwzocagjfH6XlHETTvDo'

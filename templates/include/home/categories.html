@@ -8,10 +8,14 @@
       <div class="categories-item">
         <div class="content">
           <div class="icon">
+            {% if category.image_link %}
+            <img src="{{ category.image_link.url }}" alt="Gaming & Consoles" />
+            {% else %}
             <img
               src="{% static 'assets/categories/gaming-console.png' %}"
               alt="Gaming & Consoles"
             />
+            {% endif %}
           </div>
           <span>{{ category.name }}</span>
           <a href="{% url 'app:category_detail' category_slug=category.slug%}"
