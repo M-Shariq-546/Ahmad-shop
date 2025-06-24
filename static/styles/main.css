@@ -382,10 +382,12 @@ header {
 .header-content .info {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 32px;
 }
 
 .header-content .info h1 {
+    text-align: center;
     font-weight: 600;
     font-size: 56px;
     /* color: var(--white); */
@@ -405,6 +407,7 @@ header {
     max-width: 346px;
     width: 100%;
     color: var(--dark_grey);
+    text-align: center;
 }
 
 .header-content .info .links {
@@ -457,6 +460,9 @@ header {
 
 /* News Slider */
 .header-content .right {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
     position: relative;
     max-width: 712px;
     width: 100%;
@@ -499,7 +505,7 @@ header {
     padding: 4px 10px;
     width: auto !important;
     position: absolute;
-    bottom: 30px;
+    bottom: 0;
     left: 50%;
     transform: translate(-50%, -50%);
     display: flex;
@@ -1262,10 +1268,13 @@ footer {
 }
 
 .top-right-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
     width: 273px;
     position: relative;
 }
-
 .top-right-div .slider-img {
     width: 100% !important;
     height: 100% !important;
