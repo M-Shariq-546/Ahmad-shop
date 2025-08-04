@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from products.models import Product
 from django.http import JsonResponse
 from .cart import Cart
+from telegram import Bot
 import json , requests
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
@@ -96,21 +97,8 @@ def send_to_telegram(message):
     chat_id = settings.TELEGRAM_CHANNEL_ID
     print('====== bot token', bot_token)
     print('====== chat id', chat_id)
-    telegram_api_url = f'https://api.telegram.org/bot{bot_token}/sendMessage'
-    print('====== telegram api url', telegram_api_url)
-    payload = {
-        'chat_id': chat_id,
-        'text': message,
-        'parse_mode': 'HTML',  # Optional: improves formatting
-    }
-    print('====== payload', payload)
-    response = requests.post(telegram_api_url,data=payload, timeout=10)
-    print('====== response', response)
-    if response.status_code != 200:
-        print(
-            f"Failed to send message to Telegram. Status code: {response.status_code}"
-        )
-
+    bot = Bot(token=bot_token)
+    bot.send_message(chat_id=chat_id, text=message)
 
 def checkout(request):
     cart_data = request.session.get('session_key', {})
