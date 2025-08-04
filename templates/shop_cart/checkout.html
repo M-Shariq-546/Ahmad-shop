@@ -83,6 +83,27 @@
             </div>
         </div>
     </div>
+    <!-- Sync Django cart_products to localStorage before checkout script -->
+    <script>
+        // This script ensures localStorage "cart" is always up-to-date with Django cart_products
+        const djangoCart = [
+            {% for product in cart_products %}
+            {
+                id: "{{ product.id }}",
+                name: "{{ product.name }}",
+                price: "{{ product.price }}",
+                quantity: "{{ product.quantity }}",
+                color: "{{ product.color|default:'N/A' }}",
+                image: "{{ product.images.url|default:'' }}"
+            },
+            {% endfor %}
+        ];
+        const cartObj = {};
+        djangoCart.forEach(item => {
+            cartObj[item.id] = item;
+        });
+        localStorage.setItem("cart", JSON.stringify(cartObj));
+    </script>
     <script>
         console.log('===== scripts is calling')
     document.addEventListener("DOMContentLoaded", function () {

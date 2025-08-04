@@ -64,7 +64,7 @@ def send_to_telegram_view(request):
             contact_details = received_data.get('contact', {})
             cart_items = received_data.get('cart', [])
 
-            print(cart_items)
+            print('cart items ----- ',cart_items)
 
             # Prepare the message for Telegram
             message = f"New Order Details:\n\nContact Information:\nName: {contact_details.get('name')}\nSurname: {contact_details.get('surname')}\nNumber: {contact_details.get('number')}\nAddress: {contact_details.get('address')}\n\nOrdered Items:\n"
@@ -94,15 +94,18 @@ def send_to_telegram_view(request):
 def send_to_telegram(message):
     bot_token = settings.TELEGRAM_BOT_TOKEN
     chat_id = settings.TELEGRAM_CHANNEL_ID
-
+    print('====== bot token', bot_token)
+    print('====== chat id', chat_id)
     telegram_api_url = f'https://api.telegram.org/bot{bot_token}/sendMessage'
-    params = {
+    print('====== telegram api url', telegram_api_url)
+    payload = {
         'chat_id': chat_id,
         'text': message,
+        'parse_mode': 'HTML',  # Optional: improves formatting
     }
-
-    response = requests.post(telegram_api_url, params=params)
-
+    print('====== payload', payload)
+    response = requests.post(telegram_api_url,data=payload, timeout=10)
+    print('====== response', response)
     if response.status_code != 200:
         print(
             f"Failed to send message to Telegram. Status code: {response.status_code}"
